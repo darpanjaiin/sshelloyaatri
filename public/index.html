@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Guidebook</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/gallery.css">
+</head>
+<body>
+    <div class="container">
+        <header class="property-header">
+            <div class="property-image">
+                <img src="assets/property-image.jpg" alt="Property Image" id="property-main-image">
+                <a href="#" class="social-follow" id="social-follow-link">
+                    <i class="fab fa-instagram"></i> Follow Thea Homes
+                </a>
+            </div>
+            <div class="property-info">
+                <h1 id="property-name">Thea Homes</h1>
+                <p class="location" id="property-location">Vashisht, Manali</p>
+                <p class="description" id="property-description">A beautiful, cozy 7-rooms boutique homestay in Vashisht, Manali with a view of snow-kissed majestic mountains.</p>
+            </div>
+        </header>
+
+        <nav class="main-nav">
+            <div class="nav-grid">
+                <a href="#location" class="nav-item">
+                    <div class="icon-container">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <span>Location</span>
+                </a>
+                <a href="#reviews" class="nav-item">
+                    <div class="icon-container">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <span>Reviews</span>
+                </a>
+                <a href="#wifi-rules" class="nav-item">
+                    <div class="icon-container">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                    <span>Wifi & Rules</span>
+                </a>
+                <a href="#emergency" class="nav-item">
+                    <div class="icon-container">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <span>Emergency Contact</span>
+                </a>
+                <a href="#nearby" class="nav-item">
+                    <div class="icon-container">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <span>Nearby Experiences</span>
+                </a>
+                <a href="#book" class="nav-item">
+                    <div class="icon-container">
+                        <i class="far fa-calendar-check"></i>
+                    </div>
+                    <span>Book Now</span>
+                </a>
+            </div>
+        </nav>
+
+        <section class="content-sections">
+            <div class="section-item" id="amenities">
+                <div class="section-image">
+                    <img src="assets/amenities.jpg" alt="Amenities">
+                </div>
+                <div class="section-info">
+                    <h2>Amenities</h2>
+                    <p>Find what's inside</p>
+                </div>
+            </div>
+
+            <div class="section-item" id="food">
+                <div class="section-image">
+                    <img src="assets/food.jpg" alt="Food">
+                </div>
+                <div class="section-info">
+                    <h2>Food</h2>
+                    <p>Dine and unwind</p>
+                </div>
+            </div>
+
+            <div class="section-item" id="gallery">
+                <div class="section-image">
+                    <img src="assets/gallery.jpg" alt="Gallery">
+                </div>
+                <div class="section-info">
+                    <h2>Gallery</h2>
+                    <p>View our spaces</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section content will be loaded dynamically -->
+        <div id="section-content" class="section-content">
+            <!-- Content will be loaded here -->
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/gallery.js"></script>
+    <script src="js/connection.js"></script>
+    <script src="js/test.js"></script>
+</body>
+</html>

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Guidebook - Admin Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/admin-styles.css">
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <h1>Digital Guidebook Admin</h1>
+            <p>Manage your property guidebook</p>
+        </header>
+
+        <nav class="admin-nav">
+            <ul>
+                <li class="active" data-section="property-info">
+                    <i class="fas fa-home"></i> Property Info
+                </li>
+                <li data-section="location">
+                    <i class="fas fa-map-marker-alt"></i> Location
+                </li>
+                <li data-section="amenities">
+                    <i class="fas fa-concierge-bell"></i> Amenities
+                </li>
+                <li data-section="food">
+                    <i class="fas fa-utensils"></i> Food
+                </li>
+                <li data-section="wifi-rules">
+                    <i class="fas fa-wifi"></i> Wifi & Rules
+                </li>
+                <li data-section="emergency">
+                    <i class="fas fa-phone-alt"></i> Emergency
+                </li>
+                <li data-section="nearby">
+                    <i class="fas fa-gift"></i> Nearby
+                </li>
+                <li data-section="booking">
+                    <i class="far fa-calendar-check"></i> Booking
+                </li>
+                <li data-section="gallery">
+                    <i class="fas fa-images"></i> Gallery
+                </li>
+                <li data-section="preview">
+                    <i class="fas fa-eye"></i> Preview
+                </li>
+            </ul>
+        </nav>
+
+        <main class="admin-content">
+            <!-- Property Info Section -->
+            <section id="property-info" class="content-section active">
+                <h2>Property Information</h2>
+                <form id="property-info-form">
+                    <div class="form-group">
+                        <label for="property-name">Property Name</label>
+                        <input type="text" id="property-name" name="propertyName" placeholder="e.g. Thea Homes">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="property-location">Location</label>
+                        <input type="text" id="property-location" name="location" placeholder="e.g. Vashisht, Manali">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="property-description">Description</label>
+                        <textarea id="property-description" name="description" rows="4" placeholder="Brief description of your property"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="instagram-link">Instagram Link (optional)</label>
+                        <input type="text" id="instagram-link" name="instagramLink" placeholder="e.g. https://instagram.com/youraccount">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="property-image">Property Image</label>
+                        <input type="file" id="property-image" name="propertyImage" accept="image/*">
+                        <div class="image-preview" id="property-image-preview"></div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn-save">Save Changes</button>
+                    </div>
+                </form>
+            </section>
+            
+            <!-- Location Section -->
+            <section id="location" class="content-section">
+                <h2>Location Information</h2>
+                <form id="location-form">
+                    <div class="form-group">
+                        <label for="address">Full Address</label>
+                        <textarea id="address" name="address" rows="3" placeholder="Complete address of your property"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="google-map">Google Maps Embed URL</label>
+                        <input type="text" id="google-map" name="googleMap" placeholder="e.g. https://www.google.com/maps/embed?pb=...">
+                        <p class="help-text">Go to Google Maps, search your location, click Share > Embed a map, copy the src URL</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>How to Reach</label>
+                        <div class="dynamic-fields" id="reach-info">
+                            <div class="dynamic-field">
+                                <input type="text" name="reachTitle[]" placeholder="e.g. From Airport">
+                                <input type="text" name="reachDetails[]" placeholder="e.g. 25 km (45 minutes by taxi)">
+                                <button type="button" class="btn-remove"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-add" id="add-reach">Add More</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Nearby Landmarks</label>
+                        <div class="dynamic-fields" id="landmarks">
+                            <div class="dynamic-field">
+                                <input type="text" name="landmarkName[]" placeholder="e.g. City Center">
+                                <input type="text" name="landmarkDistance[]" placeholder="e.g. 2 km">
+                                <button type="button" class="btn-remove"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-add" id="add-landmark">Add More</button>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn-save">Save Changes</button>
+                    </div>
+                </form>
+            </section>
+            
+            <!-- Amenities Section -->
+            <section id="amenities" class="content-section">
+                <h2>Amenities</h2>
+                <form id="amenities-form">
+                    <div class="form-group">
+                        <label for="amenities-image">Amenities Image</label>
+                        <input type="file" id="amenities-image" name="amenitiesImage" accept="image/*">
+                        <div class="image-preview" id="amenities-image-preview"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Room Amenities</label>
+                        <div class="dynamic-fields" id="room-amenities">
+                            <div class="dynamic-field">
+                                <input type="text" name="roomAmenity[]" placeholder="e.g. Comfortable beds with premium mattresses">
+                                <button type="button" class="btn-remove"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-add" id="add-room-amenity">Add More</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Common Areas</label>
+                        <div class="dynamic-fields" id="common-areas">
+                            <div class="dynamic-field">
+                                <input type="text" name="commonArea[]" placeholder="e.g. Spacious living room with fireplace">
+                                <button type="button" class="btn-remove"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-add" id="add-common-area">Add More</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Services</label>
+                        <div class="dynamic-fields" id="services">
+                            <div class="dynamic-field">
+                                <input type="text" name="service[]" placeholder="e.g. Homemade meals (breakfast included)">
+                                <button type="button" class="btn-remove"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-add" id="add-service">Add More</button>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn-save">Save Changes</button>
+                    </div>
+                </form>
+            </section>
+            
+            <!-- Food Section -->
+            <section id="food" class="content-section">
+                <h2>Food Information</h2>
+                <form id="food-form">
+                    <div class="form-group">
+                        <label for="food-image">Food Image</label>
+                        <input type="file" id="food-image" name="foodImage" accept="image/*">
+                        <div class="image-preview" id="food-image-preview"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="food-description">Food Description</label>
+                        <textarea id="food-description" name="foodDescription" rows="4" placeholder="Describe your food offerings"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Meal Information</label>
+                        <div class="meal-sections" id="meal-sections">
+                            <div class="meal-section">
+                                <div class="form-group">
+                                    <label>Meal Type</label>
+                                    <input type="text" name="mealType[]" placeholder="e.g. Breakfast">
+                                </div>
+                                <div class="form-group">
+                                    <label>Timing</label>
+                                    <input type="text" name="mealTiming[]" placeholder="e.g. 8:00 AM - 10:00 AM">
+                                </div>
+                                <div class="form-group">
+                                    <label>Sample Menu Items</label>
+                                    <div class="dynamic-fields" id="menu-items-0">
+                                        <div class="dynamic-field">
+                                            <input type="text" name="menuItem[0][]" placeholder="e.g. Aloo Paratha with curd">
+                                            <button type="button" class="btn-remove"><i class="fas fa-times"></i></button>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn-add menu-item-add" data-index="0">Add Item</button>
+                                </div>
+                                <button type="button" class="btn-remove-section">Remove Meal</button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-add-section" id="add-meal">Add Another Meal</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="special-requests">Special Requests Note</label>
+                        <textarea id="special-requests" name="specialRequests" rows="3" placeholder="Information about dietary restrictions, special requests, etc."></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn-save">Save Changes</button>
+                    </div>
+                </form>
+            </section>
+            
+            <!-- Wifi & Rules Section -->
+            <section id="wifi-rules" class="content-section">
+                <h2>Wifi & House Rules</h2>
+                <form id="wifi-rules-form">
+                    <div class="form-group">
+                        <h3>Wifi Information</h3>
+                        <div class="form-group">
+                            <label for="network-name">Network Name</label>
+                            <input type="text" id="network-name" name="networkName" placeholder="e.g. Guest_Wifi">
+                        </div>
+                        <div class="form-group">
+                            <label for="wifi-password">Password</label>
+                            <input type="text" id="wifi-password" name="wifiPassword" placeholder="e.g. guest123">
+                        </div>
+                        <div class="form-group">
+                            <label for="wifi-speed">Speed</label>
+                            <input type="text" id="wifi-speed" name="wifiSpeed" placeholder="e.g. 50 Mbps">
+                        </div>
+                        <div class="form-group">
+                            <label for="wifi-coverage">Coverage</label>
+                            <input type="text" id="wifi-coverage" name="wifiCoverage" placeholder="e.g. All rooms and common areas">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <h3>House Rules</h3>
+                        <div class="dynamic-fields" id="house-rules">
+                            <div class="dynamic-field">
+                                <input type="text" name="houseRule[]" placeholder="e.g. Check-in time: 12:00 PM - 8:00 PM">
+                                <button type="button" class="btn-remove"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-add" id="add-rule">Add Rule</button>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn-save">Save Changes</button>
+                    </div>
+                </form>
+            </section>
+            
+            <!-- Emergency Section -->
+            <section id="emergency" class="content-section">
+                <h2>Emergency Contacts</h2>
+                <form id="emergency-form">
+                    <div class="form-group">
+                        <h3>Property Manager</h3>
+                        <div class="form-group">
+                            <label for="manager-name">Name</label>
+                            <input type="text" id="manager-name" name="managerName" placeholder="e.g. John Smith">
+                        </div>
+                        <div class="form-group">
+                            <label for="manager-phone">Phone</label>
+                            <input type="text" id="manager-phone" name="managerPhone" placeholder="e.g. +1 234 567 8900">
+                        </div>
+                        <div class="form-group">
+                            <label for="manager-availability">Availability</label>
+                            <input type="text" id="manager-availability" name="managerAvailability" placeholder="e.g. 24/7">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <h3>Other Emergency Contacts</h3>
+                        <div class="emergency-contacts" id="emergency-contacts">
+                            <div class="emergency-contact">
+                                <div class="form-group">
+                                    <label>Contact Type</label>
+                                    <input type="text" name="contactType[]" placeholder="e.g. Medical Emergency">
+                                </div>
+                                <div class="form-group">
+                                    <label>Name/Place</label>
+                                    <input type="text" name="contactName[]" placeholder="e.g. City Hospital">
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone</label>
+                                    <input type="text" name="contactPhone[]" placeholder="e.g. +1 234 567 8900">
+                                </div>
+                                <div class="form-group">
+                                    <label>Additional Info</label>
+                                    <input type="text" name="contactInfo[]" placeholder="e.g. Distance: 3 km">
+                                </div>
+                                <button type="button" class="btn-remove-section">Remove Contact</button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-add-section" id="add-emergency">Add Emergency Contact</button>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn-save">Save Changes</button>
+                    </div>
+                </form>
+            </section>
+            
+            <!-- Nearby Section -->
+            <section id="nearby" class="content-section">
+                <h2>Nearby Experiences</h2>
+                <form id="nearby-form">
+                    <div class="nearby-experiences" id="nearby-experiences">
+                        <div class="nearby-experience">
+                            <div class="form-group">
+                                <label>Experience Name</label>
+                                <input type="text" name="experienceName[]" placeholder="e.g. Local Market">
+                            </div>
+                            <div class="form-group">
+                                <label>Distance</label>
+                                <input type="text" name="experienceDistance[]" placeholder="e.g. 500m (10 min walk)">
+                            </div>
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea name="experienceDescription[]" rows="3" placeholder="Describe this experience"></textarea>
+                            </div>
+                            <button type="button" class="btn-remove-section">Remove Experience</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add-section" id="add-experience">Add Experience</button>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn-save">Save Changes</button>
+                    </div>
+                </form>
+            </section>
+            
+            <!-- Booking Section -->
+            <section id="booking" class="content-section">
+                <h2>Booking Information</h2>
+                <form id="booking-form">
+                    <div class="form-group">
+                        <label for="booking-intro">Introduction Text</label>
+                        <textarea id="booking-intro" name="bookingIntro" rows="3" placeholder="Introduction text for booking section"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <h3>Booking Options</h3>
+                        <div class="booking-options" id="booking-options">
+                            <div class="booking-option">
+                                <div class="form-group">
+                                    <label>Platform/Method</label>
+                                    <input type="text" name="bookingPlatform[]" placeholder="e.g. Airbnb">
+                                </div>
+                                <div class="form-group">
+                                    <label>Link/Contact</label>
+                                    <input type="text" name="bookingLink[]" placeholder="e.g. https://airbnb.com/h/yourproperty">
+                                </div>
+                                <button type="button" class="btn-remove-section">Remove Option</button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-add-section" id="add-booking">Add Booking Option</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <h3>Room Types</h3>
+                        <div class="room-types" id="room-types">
+                            <div class="room-type">
+                                <div class="form-group">
+                                    <label>Room Name</label>
+                                    <input type="text" name="roomName[]" placeholder="e.g. Deluxe Suite">
+                                </div>
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <input type="text" name="roomDescription[]" placeholder="e.g. King bed, sitting area, premium bathroom">
+                                </div>
+                                <button type="button" class="btn-remove-section">Remove Room</button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-add-section" id="add-room">Add Room Type</button>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn-save">Save Changes</button>
+                    </div>
+                </form>
+            </section>
+            
+            <!-- Gallery Section -->
+            <section id="gallery" class="content-section">
+                <h2>Photo Gallery</h2>
+                <form id="gallery-form">
+                    <div class="form-group">
+                        <label for="gallery-image">Add Gallery Image</label>
+                        <input type="file" id="gallery-image" name="galleryImage" accept="image/*" multiple>
+                    </div>
+                    
+                    <div class="gallery-preview" id="gallery-preview">
+                        <!-- Gallery images will be displayed here -->
+                        <p class="empty-gallery">No images added yet. Upload images to see them here.</p>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn-save">Save Changes</button>
+                    </div>
+                </form>
+            </section>
+            
+            <!-- Preview Section -->
+            <section id="preview" class="content-section">
+                <h2>Preview Your Guidebook</h2>
+                <div class="preview-actions">
+                    <a href="../public/index.html" target="_blank" class="btn-preview">Open Guidebook in New Tab</a>
+                    <button id="publish-guidebook" class="btn-publish">Publish Changes</button>
+                </div>
+                <div class="preview-frame-container">
+                    <iframe id="preview-frame" src="../public/index.html"></iframe>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/admin.js"></script>
+    <script src="js/test.js"></script>
+</body>
+</html>
