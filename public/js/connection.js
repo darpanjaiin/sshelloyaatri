@@ -2,6 +2,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize the connection between admin and guidebook
     initConnection();
+    
+    // Set up real-time updates
+    setupRealTimeUpdates();
 });
 
 // Initialize connection
@@ -232,24 +235,39 @@ function getDefaultData() {
     };
 }
 
-// Update guidebook display with data
+// Set up real-time updates
+function setupRealTimeUpdates() {
+    // Check for updates every second
+    setInterval(() => {
+        const currentData = loadGuidebookData();
+        updateGuidebookDisplay(currentData);
+    }, 1000);
+}
+
+// Update guidebook display with new data
 function updateGuidebookDisplay(data) {
     // Update property information
-    document.getElementById('property-name').textContent = data.propertyName || 'Property Name';
-    document.getElementById('property-location').textContent = data.location || 'Location';
-    document.getElementById('property-description').textContent = data.description || 'Property description';
-    
-    // Update social media link
-    const socialLink = document.getElementById('social-follow-link');
-    if (data.socialMedia && data.socialMedia.instagram) {
-        socialLink.href = data.socialMedia.instagram;
+    if (data.sections && data.sections['property-info']) {
+        const propertyInfo = data.sections['property-info'];
+        document.getElementById('property-name').textContent = propertyInfo.propertyName || '';
+        document.getElementById('property-location').textContent = propertyInfo.location || '';
+        document.getElementById('property-description').textContent = propertyInfo.description || '';
+        
+        // Update social media link
+        const socialLink = document.getElementById('social-follow-link');
+        if (socialLink && propertyInfo.instagramLink) {
+            socialLink.href = propertyInfo.instagramLink;
+        }
     }
-    
-    // Update property image
+
+    // Update property image if available
     if (data.images && data.images.property) {
-        document.getElementById('property-main-image').src = data.images.property;
+        const propertyImage = document.getElementById('property-main-image');
+        if (propertyImage) {
+            propertyImage.src = data.images.property;
+        }
     }
-    
+
     // Update section images
     if (data.images) {
         // Amenities image
@@ -268,49 +286,27 @@ function updateGuidebookDisplay(data) {
             }
         }
     }
-    
-    // Set up event listeners for real-time updates
-    setupRealTimeUpdates();
-}
 
-// Set up event listeners for real-time updates
-function setupRealTimeUpdates() {
-    // Listen for storage events (when localStorage is updated from admin panel)
-    window.addEventListener('storage', function(e) {
-        if (e.key === 'guidebookData') {
-            // Reload data and update display
-            const guidebookData = loadGuidebookData();
-            updateGuidebookDisplay(guidebookData);
-            
-            // If a section is currently open, refresh its content
-            const activeSection = document.querySelector('.section-content.active');
-            if (activeSection) {
-                const sectionId = activeSection.getAttribute('data-section');
-                if (sectionId) {
-                    loadSectionContent(sectionId);
-                }
+    // Update section content
+    if (data.sections) {
+        Object.keys(data.sections).forEach(sectionId => {
+            const section = data.sections[sectionId];
+            const sectionContent = document.getElementById('section-content');
+            if (sectionContent) {
+                const content = generateSectionContent(sectionId, section);
+                sectionContent.innerHTML = content;
             }
-        }
-    });
-    
-    // Create a custom event for manual refresh
-    document.addEventListener('guidebookDataUpdated', function() {
-        const guidebookData = loadGuidebookData();
-        updateGuidebookDisplay(guidebookData);
-    });
+        });
+    }
+
+    // Update gallery
+    if (data.images && data.images.gallery) {
+        generateGalleryContent(data.images.gallery);
+    }
 }
 
 // Generate HTML content for each section
-function generateSectionContent(sectionId, data) {
-    const sections = data.sections;
-    
-    if (!sections || !sections[sectionId]) {
-        return `<h2>${sectionId.charAt(0).toUpperCase() + sectionId.slice(1)}</h2><p>No data available for this section.</p>`;
-    }
-    
-    const section = sections[sectionId];
-    
-    // Generate HTML based on section ID
+function generateSectionContent(sectionId, section) {
     switch (sectionId) {
         case 'location':
             return generateLocationContent(section);
@@ -329,7 +325,7 @@ function generateSectionContent(sectionId, data) {
         case 'food':
             return generateFoodContent(section);
         case 'gallery':
-            return generateGalleryContent(data);
+            return generateGalleryContent(section);
         default:
             return `<h2>${section.title || 'Section'}</h2><p>Content for this section is not available.</p>`;
     }

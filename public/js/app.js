@@ -383,21 +383,49 @@ function updateUI(data) {
 
 // Load section content
 function loadSectionContent(sectionId) {
-    const sectionContentDiv = document.getElementById('section-content');
-    const guidebookData = loadGuidebookData();
+    // Update active state in navigation
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+        if (item.getAttribute('href') === `#${sectionId}`) {
+            item.classList.add('active');
+        }
+    });
     
-    // Get section data
-    const sectionData = guidebookData.sections[sectionId];
+    // Get section data from localStorage
+    const guidebookData = JSON.parse(localStorage.getItem('guidebookData') || '{}');
+    const sectionData = guidebookData[sectionId];
     
-    if (sectionData) {
-        // Show section content
-        sectionContentDiv.innerHTML = sectionData.content;
-        sectionContentDiv.classList.add('active');
-        
-        // Scroll to section content
-        sectionContentDiv.scrollIntoView({ behavior: 'smooth' });
-    } else {
-        console.error(`Section data not found for: ${sectionId}`);
+    // Generate and display content
+    const sectionContent = document.getElementById('section-content');
+    if (sectionContent && sectionData) {
+        const content = generateSectionContent(sectionId, sectionData);
+        sectionContent.innerHTML = content;
+    }
+}
+
+// Generate content for a section
+function generateSectionContent(sectionId, data) {
+    switch(sectionId) {
+        case 'location':
+            return generateLocationContent(data);
+        case 'reviews':
+            return generateReviewsContent(data);
+        case 'wifi-rules':
+            return generateWifiRulesContent(data);
+        case 'emergency':
+            return generateEmergencyContent(data);
+        case 'nearby':
+            return generateNearbyContent(data);
+        case 'book':
+            return generateBookingContent(data);
+        case 'amenities':
+            return generateAmenitiesContent(data);
+        case 'food':
+            return generateFoodContent(data);
+        case 'gallery':
+            return generateGalleryContent(data);
+        default:
+            return '<p>Content not available</p>';
     }
 }
 

@@ -883,15 +883,16 @@ function saveFormData(form) {
     
     // Save data based on form ID
     if (formId === 'property-info-form') {
-        guidebookData.propertyName = document.getElementById('property-name').value;
-        guidebookData.location = document.getElementById('property-location').value;
-        guidebookData.description = document.getElementById('property-description').value;
-        
-        // Social media
-        if (!guidebookData.socialMedia) {
-            guidebookData.socialMedia = {};
+        if (!guidebookData.sections) {
+            guidebookData.sections = {};
         }
-        guidebookData.socialMedia.instagram = document.getElementById('instagram-link').value;
+        
+        guidebookData.sections['property-info'] = {
+            propertyName: document.getElementById('property-name').value,
+            location: document.getElementById('property-location').value,
+            description: document.getElementById('property-description').value,
+            instagramLink: document.getElementById('instagram-link').value
+        };
         
         // Property image
         const propertyImagePreview = document.getElementById('property-image-preview');
@@ -907,32 +908,19 @@ function saveFormData(form) {
             guidebookData.sections = {};
         }
         
-        if (!guidebookData.sections.location) {
-            guidebookData.sections.location = {
-                title: 'Location'
-            };
-        }
-        
-        guidebookData.sections.location.address = document.getElementById('address').value;
-        guidebookData.sections.location.googleMap = document.getElementById('google-map').value;
-        
-        // Reach Info
-        const reachTitles = Array.from(document.getElementsByName('reachTitle[]')).map(input => input.value);
-        const reachDetails = Array.from(document.getElementsByName('reachDetails[]')).map(input => input.value);
-        
-        guidebookData.sections.location.reachInfo = reachTitles.map((title, index) => ({
-            title,
-            details: reachDetails[index] || ''
-        }));
-        
-        // Landmarks
-        const landmarkNames = Array.from(document.getElementsByName('landmarkName[]')).map(input => input.value);
-        const landmarkDistances = Array.from(document.getElementsByName('landmarkDistance[]')).map(input => input.value);
-        
-        guidebookData.sections.location.landmarks = landmarkNames.map((name, index) => ({
-            name,
-            distance: landmarkDistances[index] || ''
-        }));
+        guidebookData.sections.location = {
+            title: 'Location',
+            address: document.getElementById('address').value,
+            googleMap: document.getElementById('google-map').value,
+            reachInfo: Array.from(document.getElementsByName('reachTitle[]')).map((input, index) => ({
+                title: input.value,
+                details: document.getElementsByName('reachDetails[]')[index]?.value || ''
+            })),
+            landmarks: Array.from(document.getElementsByName('landmarkName[]')).map((input, index) => ({
+                name: input.value,
+                distance: document.getElementsByName('landmarkDistance[]')[index]?.value || ''
+            }))
+        };
     }
     else if (formId === 'amenities-form') {
         if (!guidebookData.sections) {
@@ -1141,29 +1129,29 @@ function saveFormData(form) {
 }
 
 // Show save success message
-function showSaveSuccess() {
-    const message = document.createElement('div');
-    message.className = 'save-success';
-    message.innerHTML = 'Changes saved successfully!';
-    message.style.position = 'fixed';
-    message.style.bottom = '20px';
-    message.style.right = '20px';
-    message.style.backgroundColor = '#2ecc71';
-    message.style.color = 'white';
-    message.style.padding = '10px 20px';
-    message.style.borderRadius = '4px';
-    message.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
-    message.style.zIndex = '1000';
+function showSaveSuccess(message = 'Changes saved successfully!') {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'save-success';
+    messageDiv.innerHTML = message;
+    messageDiv.style.position = 'fixed';
+    messageDiv.style.bottom = '20px';
+    messageDiv.style.right = '20px';
+    messageDiv.style.backgroundColor = '#2ecc71';
+    messageDiv.style.color = 'white';
+    messageDiv.style.padding = '10px 20px';
+    messageDiv.style.borderRadius = '4px';
+    messageDiv.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+    messageDiv.style.zIndex = '1000';
     
-    document.body.appendChild(message);
+    document.body.appendChild(messageDiv);
     
     // Remove message after 3 seconds
     setTimeout(() => {
-        message.style.opacity = '0';
-        message.style.transition = 'opacity 0.5s ease';
+        messageDiv.style.opacity = '0';
+        messageDiv.style.transition = 'opacity 0.5s ease';
         
         setTimeout(() => {
-            document.body.removeChild(message);
+            document.body.removeChild(messageDiv);
         }, 500);
     }, 3000);
 }
@@ -1178,32 +1166,18 @@ function updatePreview() {
 
 // Publish guidebook
 function publishGuidebook() {
-    // For MVP, publishing just means saving the data
-    // In a real application, this would involve more steps
+    // Get all form data
+    const guidebookData = loadGuidebookData();
     
-    // Show publish success message
-    const message = document.createElement('div');
-    message.className = 'publish-success';
-    message.innerHTML = 'Guidebook published successfully!';
-    message.style.position = 'fixed';
-    message.style.bottom = '20px';
-    message.style.right = '20px';
-    message.style.backgroundColor = '#e67e22';
-    message.style.color = 'white';
-    message.style.padding = '10px 20px';
-    message.style.borderRadius = '4px';
-    message.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
-    message.style.zIndex = '1000';
+    // Save to localStorage
+    localStorage.setItem('guidebookData', JSON.stringify(guidebookData));
     
-    document.body.appendChild(message);
+    // Update preview iframe
+    const previewFrame = document.getElementById('preview-frame');
+    if (previewFrame) {
+        previewFrame.contentWindow.location.reload();
+    }
     
-    // Remove message after 3 seconds
-    setTimeout(() => {
-        message.style.opacity = '0';
-        message.style.transition = 'opacity 0.5s ease';
-        
-        setTimeout(() => {
-            document.body.removeChild(message);
-        }, 500);
-    }, 3000);
+    // Show success message
+    showSaveSuccess('Guidebook published successfully!');
 }
